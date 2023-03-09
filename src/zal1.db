@@ -1,0 +1,43 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "konto" (
+	"id"	INTEGER,
+	"nazwa"	TEXT,
+	PRIMARY KEY("id")
+);
+CREATE TABLE IF NOT EXISTS "transakcje" (
+	"id"	INTEGER,
+	"id_konta"	INTEGER,
+	"data"	DATE,
+	"kwota"	FLOAT,
+	PRIMARY KEY("id"),
+	FOREIGN KEY("id_konta") REFERENCES "konto"("id")
+);
+CREATE TABLE IF NOT EXISTS "wydatki" (
+	"id"	INTEGER,
+	"id_konta"	INTEGER,
+	"data"	DATE,
+	"kwota"	FLOAT,
+	"kategoria"	TEXT,
+	PRIMARY KEY("id"),
+	FOREIGN KEY("id_konta") REFERENCES "konto"("id"),
+	FOREIGN KEY("id") REFERENCES "transakcje"("id")
+);
+CREATE TABLE IF NOT EXISTS "przychody" (
+	"id"	INTEGER,
+	"id_konta"	INTEGER,
+	"data"	DATE,
+	"kwota"	FLOAT,
+	"zrodlo"	TEXT,
+	PRIMARY KEY("id"),
+	FOREIGN KEY("id") REFERENCES "transakcje"("id"),
+	FOREIGN KEY("id_konta") REFERENCES "konto"("id")
+);
+INSERT INTO "konto" VALUES (1,'Konto oszczędnościowe');
+INSERT INTO "konto" VALUES (2,'Konto bieżące');
+INSERT INTO "transakcje" VALUES (1,1,'2022-02-01',2000.5);
+INSERT INTO "transakcje" VALUES (2,1,'2022-02-15',-500.25);
+INSERT INTO "wydatki" VALUES (1,1,'2022-02-02',250.75,'jedzenie');
+INSERT INTO "wydatki" VALUES (2,1,'2022-02-10',100.0,'rozrywka');
+INSERT INTO "przychody" VALUES (1,2,'2022-02-05',3500.0,'wynagrodzenie');
+INSERT INTO "przychody" VALUES (2,2,'2022-02-20',1000.0,'prezent');
+COMMIT;
